@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://0ufapi3lmh0r"]
+
+[ext_resource type="Texture2D" uid="uid://dlihjwp2fv3nd" path="res://Images/Bullets.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/MoveObject.gd" id="2"]
+
+[sub_resource type="CapsuleShape2D" id="1"]
+radius = 6.0
+height = 34.0
+
+[node name="Bullet" type="Area2D" groups=["Bullet"]]
+script = ExtResource("2")
+speed = -10
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(91, 146, 35, 66)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1")

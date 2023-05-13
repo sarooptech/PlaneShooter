@@ -1,0 +1,41 @@
+[gd_scene load_steps=8 format=3 uid="uid://ct527xfahoosm"]
+
+[ext_resource type="Texture2D" uid="uid://oba7ro7vjk50" path="res://Images/Background.png" id="1_jpc7h"]
+[ext_resource type="Script" path="res://Scripts/ScrollingBackground.gd" id="2_lcten"]
+[ext_resource type="PackedScene" uid="uid://cees77wqu84p7" path="res://Prefabs/Player.tscn" id="3_71amd"]
+[ext_resource type="PackedScene" uid="uid://enjgvnj5nqq4" path="res://Prefabs/Shredder.tscn" id="4_nadma"]
+[ext_resource type="Script" path="res://Scripts/Spawner.gd" id="5_xn2td"]
+[ext_resource type="PackedScene" uid="uid://dg8tits21lt5e" path="res://Prefabs/GameUI.tscn" id="7_absa1"]
+[ext_resource type="Resource" uid="uid://d2udvg1ethnkh" path="res://Levels/level_1.tres" id="9_uugsg"]
+
+[node name="MainScene" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(360, 640)
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_repeat = 2
+position = Vector2(360, 640)
+texture = ExtResource("1_jpc7h")
+region_enabled = true
+region_rect = Rect2(0, 0, 864, 1920)
+script = ExtResource("2_lcten")
+
+[node name="Player" parent="." node_paths=PackedStringArray("game_ui") instance=ExtResource("3_71amd")]
+unique_name_in_owner = true
+position = Vector2(332, 1154)
+game_ui = NodePath("../GameUI")
+
+[node name="Shredder1" parent="." instance=ExtResource("4_nadma")]
+position = Vector2(360, -381)
+
+[node name="Shredder2" parent="." instance=ExtResource("4_nadma")]
+position = Vector2(360, 1660)
+
+[node name="Spawner" type="Node2D" parent="." node_paths=PackedStringArray("game_ui")]
+position = Vector2(360, -150)
+script = ExtResource("5_xn2td")
+level_data = ExtResource("9_uugsg")
+game_ui = NodePath("../GameUI")
+
+[node name="GameUI" parent="." instance=ExtResource("7_absa1")]

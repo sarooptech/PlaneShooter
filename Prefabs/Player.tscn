@@ -1,0 +1,106 @@
+[gd_scene load_steps=15 format=3 uid="uid://cees77wqu84p7"]
+
+[ext_resource type="Texture2D" uid="uid://brjqcm5hsqd3o" path="res://Images/Player.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/Player.gd" id="2"]
+[ext_resource type="Script" path="res://Scripts/Shooter.gd" id="3"]
+[ext_resource type="PackedScene" path="res://Prefabs/BlastEffect.tscn" id="3_rmj3p"]
+[ext_resource type="Texture2D" uid="uid://dlihjwp2fv3nd" path="res://Images/Bullets.png" id="4"]
+[ext_resource type="AudioStream" uid="uid://btrt2scrtyvv8" path="res://Audio/Coin.wav" id="4_e1t3y"]
+[ext_resource type="PackedScene" uid="uid://0ufapi3lmh0r" path="res://Prefabs/Bullet.tscn" id="5"]
+[ext_resource type="AudioStream" uid="uid://blgpgcy6i17ap" path="res://Audio/PowerUp.wav" id="5_desho"]
+[ext_resource type="AudioStream" uid="uid://do1wdophodk3" path="res://Audio/PlayerDamage.wav" id="6_xqc6g"]
+[ext_resource type="PackedScene" uid="uid://d85mpuuqqxtx" path="res://Prefabs/DamageEffect.tscn" id="8"]
+[ext_resource type="AudioStream" uid="uid://bdpdssvlwbtgj" path="res://Audio/Bullet.wav" id="11_my65r"]
+
+[sub_resource type="Animation" id="1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="2"]
+resource_name = "fly"
+length = 0.1
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_i1l87"]
+_data = {
+"RESET": SubResource("1"),
+"fly": SubResource("2")
+}
+
+[node name="Player" type="Area2D"]
+z_index = 5
+script = ExtResource("2")
+damage_prefab = ExtResource("8")
+blast_effect_prefab = ExtResource("3_rmj3p")
+coin_sound = ExtResource("4_e1t3y")
+power_up_sound = ExtResource("5_desho")
+damage_sound = ExtResource("6_xqc6g")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1")
+hframes = 2
+frame = 1
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-17, -35, -87, -24, -89, -14, -84, -6, 83, -6, 86, -17, 84, -24, 16, -35, 9, -56, -11, -56)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+autoplay = "fly"
+libraries = {
+"": SubResource("AnimationLibrary_i1l87")
+}
+
+[node name="GunFlash" type="Node2D" parent="."]
+
+[node name="1" type="Sprite2D" parent="GunFlash"]
+position = Vector2(-49, -58)
+texture = ExtResource("4")
+region_enabled = true
+region_rect = Rect2(95, 92, 31, 29)
+
+[node name="2" type="Sprite2D" parent="GunFlash"]
+position = Vector2(50, -58)
+texture = ExtResource("4")
+region_enabled = true
+region_rect = Rect2(95, 92, 31, 29)
+
+[node name="Shooter" type="Node" parent="." node_paths=PackedStringArray("gun_flash")]
+script = ExtResource("3")
+is_enemy = false
+bullet_prefab = ExtResource("5")
+auto_shoot_delay = 0.3
+gun_flash = NodePath("../GunFlash")
+bullet_sound = ExtResource("11_my65r")
+
+[node name="GunPoint_0" type="Marker2D" parent="Shooter"]
+position = Vector2(-48, -26)
+
+[node name="GunPoint_1" type="Marker2D" parent="Shooter"]
+position = Vector2(50, -26)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]

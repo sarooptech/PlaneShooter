@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dcr6iax6rmlsv"]
+
+[ext_resource type="Script" path="res://Scripts/MoveObject.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://d2k0w4tcwlyxw" path="res://Images/Ball.png" id="2_y2hyi"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uufji"]
+radius = 14.0
+
+[node name="Ball" type="Area2D" groups=["EnemyBullet"]]
+script = ExtResource("2")
+speed = 10
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1.75, 3.4)
+texture = ExtResource("2_y2hyi")
+region_rect = Rect2(228, 365, 87, 165)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_uufji")

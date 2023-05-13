@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Texture2D" uid="uid://511scju6paq8" path="res://Images/Coin.png" id="1"]
+[ext_resource type="Script" path="res://Scripts/MoveObject.gd" id="2"]
+
+[sub_resource type="CircleShape2D" id="3"]
+radius = 32.5576
+
+[sub_resource type="Animation" id="2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(364, 19, 84, 85)]
+}
+
+[sub_resource type="Animation" id="1"]
+resource_name = "rorate"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Rect2(41, 18, 20, 87), Rect2(160, 21, 49, 86), Rect2(260, 18, 82, 86), Rect2(364, 19, 84, 85), Rect2(23, 137, 52, 92)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lpj3w"]
+_data = {
+"RESET": SubResource("2"),
+"rorate": SubResource("1")
+}
+
+[node name="Coin" type="Area2D" groups=["Coin"]]
+script = ExtResource("2")
+speed = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1")
+region_enabled = true
+region_rect = Rect2(364, 19, 84, 85)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "rorate"
+libraries = {
+"": SubResource("AnimationLibrary_lpj3w")
+}

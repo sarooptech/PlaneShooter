@@ -1,0 +1,94 @@
+[gd_scene load_steps=14 format=3 uid="uid://balkehu8qf0ik"]
+
+[ext_resource type="Script" path="res://Scripts/Enemy.gd" id="1_wyn77"]
+[ext_resource type="PackedScene" uid="uid://d85mpuuqqxtx" path="res://Prefabs/DamageEffect.tscn" id="2_k2p5x"]
+[ext_resource type="PackedScene" uid="uid://7l8qsqynrty4" path="res://Prefabs/Explosion.tscn" id="3_ybr4p"]
+[ext_resource type="AudioStream" uid="uid://d12gsr5xvid1d" path="res://Audio/DamageSound.wav" id="4_32i18"]
+[ext_resource type="Texture2D" uid="uid://dw8tw6xckljnm" path="res://Images/Enemy_2.png" id="5_glou8"]
+[ext_resource type="Texture2D" uid="uid://dlihjwp2fv3nd" path="res://Images/Bullets.png" id="6_ymlen"]
+[ext_resource type="Script" path="res://Scripts/Shooter.gd" id="7_0fgb8"]
+[ext_resource type="PackedScene" uid="uid://cx6rx1g1uek36" path="res://Prefabs/EnemyBullet.tscn" id="8_8jul6"]
+[ext_resource type="AudioStream" uid="uid://ds2bqmakjvpcf" path="res://Audio/Damage.wav" id="9_27lg3"]
+[ext_resource type="PackedScene" path="res://Prefabs/HealthBar.tscn" id="10_ccb1c"]
+
+[sub_resource type="Animation" id="1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="2"]
+resource_name = "fly"
+length = 0.1
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_04iyx"]
+_data = {
+"RESET": SubResource("1"),
+"fly": SubResource("2")
+}
+
+[node name="Enemy_2" type="Area2D"]
+z_index = 5
+script = ExtResource("1_wyn77")
+damage_prefab = ExtResource("2_k2p5x")
+explosion_prefab = ExtResource("3_ybr4p")
+damage_sound = ExtResource("4_32i18")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("5_glou8")
+hframes = 2
+frame = 1
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-12, 56, 0, 63, 11, 56, 12, 28, 107, 14, 111, 3, -112, 3, -108, 13, -12, 28)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+autoplay = "fly"
+libraries = {
+"": SubResource("AnimationLibrary_04iyx")
+}
+
+[node name="GunFlash" type="Node2D" parent="."]
+
+[node name="1" type="Sprite2D" parent="GunFlash"]
+position = Vector2(-1, 73)
+texture = ExtResource("6_ymlen")
+region_enabled = true
+region_rect = Rect2(166, 95, 32, 28)
+
+[node name="Shooter" type="Node" parent="." node_paths=PackedStringArray("gun_flash")]
+script = ExtResource("7_0fgb8")
+bullet_prefab = ExtResource("8_8jul6")
+auto_shoot_delay = 1.5
+gun_flash = NodePath("../GunFlash")
+bullet_sound = ExtResource("9_27lg3")
+
+[node name="GunPoint_0" type="Marker2D" parent="Shooter"]
+position = Vector2(0, 66)
+
+[node name="HealthBar" parent="." instance=ExtResource("10_ccb1c")]
+position = Vector2(0, 100)

@@ -1,0 +1,93 @@
+[gd_scene load_steps=9 format=3 uid="uid://7l8qsqynrty4"]
+
+[ext_resource type="Script" path="res://Scripts/Explosion.gd" id="2"]
+[ext_resource type="PackedScene" path="res://Prefabs/Coin.tscn" id="2_je3kv"]
+[ext_resource type="Texture2D" uid="uid://bqs45wjgg8lwu" path="res://Images/Explosion.png" id="2_kwta6"]
+[ext_resource type="PackedScene" uid="uid://dwhygvpfahog" path="res://Prefabs/PowerUp.tscn" id="3_tcwpd"]
+[ext_resource type="AudioStream" uid="uid://d1m3ik8fqpsq4" path="res://Audio/Explosion.wav" id="5_kouex"]
+
+[sub_resource type="Animation" id="2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="1"]
+resource_name = "blast"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [1, 2, 3, 4, 5, 6, 7]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.8),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"add_coin"
+}]
+}
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer2D")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 1.16504,
+"stream": ExtResource("5_kouex")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/2/use_blend = true
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kw4st"]
+_data = {
+"RESET": SubResource("2"),
+"blast": SubResource("1")
+}
+
+[node name="Explosion" type="Node2D"]
+process_mode = 3
+script = ExtResource("2")
+coin_prefab = ExtResource("2_je3kv")
+power_up_prefab = ExtResource("3_tcwpd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_kwta6")
+hframes = 4
+vframes = 2
+frame = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "blast"
+libraries = {
+"": SubResource("AnimationLibrary_kw4st")
+}
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
